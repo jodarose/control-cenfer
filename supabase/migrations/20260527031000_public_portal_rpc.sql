@@ -1,6 +1,13 @@
--- Unique constraint required for upsert in person_documents
-alter table person_documents
-  add constraint if not exists person_documents_person_type_unique unique (person_id, document_type);
+-- Unique constraint required for upsert in person_documents (Postgres doesn't support IF NOT EXISTS on ADD CONSTRAINT)
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'person_documents_person_type_unique'
+  ) then
+    alter table person_documents
+      add constraint person_documents_person_type_unique unique (person_id, document_type);
+  end if;
+end$$;
 
 -- Add a person (or get existing) to a request via public token
 create or replace function public_add_person_to_request(

@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { createPublicClient } from '@/lib/supabase/public-client';
 import type { DocumentTypeKey, PersonRequestStatus } from '@cenfer/shared';
-import { canSubmitRequest } from '@cenfer/shared';
+// Portal-side gate: company can submit if there's at least one person and none are rechazada.
+// (canSubmitRequest from shared is used by SST approval flow, not portal submit.)
 
 type RequestMeta = {
   id: string;
@@ -76,15 +77,12 @@ export function PortalEmpresa({
 
   async function handleSubmitToSst() {
     setError(null);
-    const decision = canSubmitRequest({
-      people: people.map((p) => ({ estado_individual: p.estado_individual })),
-    });
-    if (!decision.ok) {
-      setError(
-        decision.reason === 'sin_personas'
-          ? 'Agrega al menos una persona antes de enviar.'
-          : 'Algunas personas aún no tienen todos sus documentos cargados.',
-      );
+    if (people.length === 0) {
+      setError('Agrega al menos una persona antes de enviar.');
+      return;
+    }
+    if (people.some((p) => p.estado_individual === 'rechazada')) {
+      setError('Hay personas rechazadas. Resuélvelo con SST antes de reenviar.');
       return;
     }
     setSubmitting(true);
