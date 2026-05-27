@@ -5,6 +5,7 @@ export default async function DashboardPage() {
   const { profile } = await getAuthenticatedUser();
   const canSeeEmpresas = ['super_admin', 'recepcion', 'sst'].includes(profile.rol);
   const canSeeSolicitudes = ['super_admin', 'recepcion', 'sst', 'empresa'].includes(profile.rol);
+  const canSeeSstBandeja = ['super_admin', 'sst'].includes(profile.rol);
 
   return (
     <div>
@@ -26,6 +27,11 @@ export default async function DashboardPage() {
         {canSeeSolicitudes && (
           <Link className="block text-blue-600 hover:underline" href="/dashboard/solicitudes">
             → Solicitudes de acceso
+          </Link>
+        )}
+        {canSeeSstBandeja && (
+          <Link className="block text-blue-600 hover:underline" href="/dashboard/sst/bandeja">
+            → Bandeja SST
           </Link>
         )}
       </div>
