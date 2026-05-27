@@ -14,6 +14,176 @@ export type Database = {
   }
   public: {
     Tables: {
+      activities: {
+        Row: {
+          activa: boolean
+          created_at: string
+          documentos_requeridos: Database["public"]["Enums"]["document_type_key"][]
+          id: string
+          nivel_riesgo_default: Database["public"]["Enums"]["risk_level"]
+          nombre: string
+          updated_at: string
+        }
+        Insert: {
+          activa?: boolean
+          created_at?: string
+          documentos_requeridos?: Database["public"]["Enums"]["document_type_key"][]
+          id?: string
+          nivel_riesgo_default: Database["public"]["Enums"]["risk_level"]
+          nombre: string
+          updated_at?: string
+        }
+        Update: {
+          activa?: boolean
+          created_at?: string
+          documentos_requeridos?: Database["public"]["Enums"]["document_type_key"][]
+          id?: string
+          nivel_riesgo_default?: Database["public"]["Enums"]["risk_level"]
+          nombre?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      areas: {
+        Row: {
+          activa: boolean
+          created_at: string
+          descripcion: string | null
+          id: string
+          nombre: string
+          updated_at: string
+        }
+        Insert: {
+          activa?: boolean
+          created_at?: string
+          descripcion?: string | null
+          id?: string
+          nombre: string
+          updated_at?: string
+        }
+        Update: {
+          activa?: boolean
+          created_at?: string
+          descripcion?: string | null
+          id?: string
+          nombre?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      companies: {
+        Row: {
+          activa: boolean
+          contacto_email: string
+          contacto_nombre: string
+          contacto_telefono: string | null
+          created_at: string
+          documentos_legales: Json
+          id: string
+          nit: string
+          razon_social: string
+          updated_at: string
+        }
+        Insert: {
+          activa?: boolean
+          contacto_email: string
+          contacto_nombre: string
+          contacto_telefono?: string | null
+          created_at?: string
+          documentos_legales?: Json
+          id?: string
+          nit: string
+          razon_social: string
+          updated_at?: string
+        }
+        Update: {
+          activa?: boolean
+          contacto_email?: string
+          contacto_nombre?: string
+          contacto_telefono?: string | null
+          created_at?: string
+          documentos_legales?: Json
+          id?: string
+          nit?: string
+          razon_social?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      company_users: {
+        Row: {
+          company_id: string
+          created_at: string
+          user_id: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          user_id: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_users_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_types: {
+        Row: {
+          created_at: string
+          key: Database["public"]["Enums"]["document_type_key"]
+          meses_vigencia_default: number | null
+          nombre: string
+          requiere_vencimiento: boolean
+        }
+        Insert: {
+          created_at?: string
+          key: Database["public"]["Enums"]["document_type_key"]
+          meses_vigencia_default?: number | null
+          nombre: string
+          requiere_vencimiento?: boolean
+        }
+        Update: {
+          created_at?: string
+          key?: Database["public"]["Enums"]["document_type_key"]
+          meses_vigencia_default?: number | null
+          nombre?: string
+          requiere_vencimiento?: boolean
+        }
+        Relationships: []
+      }
+      porterias: {
+        Row: {
+          activa: boolean
+          created_at: string
+          id: string
+          nombre: string
+          ubicacion: string | null
+        }
+        Insert: {
+          activa?: boolean
+          created_at?: string
+          id?: string
+          nombre: string
+          ubicacion?: string | null
+        }
+        Update: {
+          activa?: boolean
+          created_at?: string
+          id?: string
+          nombre?: string
+          ubicacion?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           apellido: string
@@ -53,8 +223,20 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["role"]
       }
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
     }
     Enums: {
+      document_type_key:
+        | "cedula"
+        | "arl"
+        | "eps"
+        | "pila"
+        | "foto"
+        | "induccion"
+        | "alturas"
+        | "examen_medico"
+      risk_level: "bajo" | "medio" | "alto"
       role:
         | "super_admin"
         | "sst"
@@ -189,6 +371,17 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      document_type_key: [
+        "cedula",
+        "arl",
+        "eps",
+        "pila",
+        "foto",
+        "induccion",
+        "alturas",
+        "examen_medico",
+      ],
+      risk_level: ["bajo", "medio", "alto"],
       role: [
         "super_admin",
         "sst",
