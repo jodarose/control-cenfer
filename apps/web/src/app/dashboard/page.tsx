@@ -6,6 +6,7 @@ export default async function DashboardPage() {
   const canSeeEmpresas = ['super_admin', 'recepcion', 'sst'].includes(profile.rol);
   const canSeeSolicitudes = ['super_admin', 'recepcion', 'sst', 'empresa'].includes(profile.rol);
   const canSeeSstBandeja = ['super_admin', 'sst'].includes(profile.rol);
+  const canSeePorteria = ['super_admin', 'sst', 'recepcion', 'portero'].includes(profile.rol);
 
   return (
     <div>
@@ -27,6 +28,11 @@ export default async function DashboardPage() {
         {canSeeSolicitudes && (
           <Link className="block text-blue-600 hover:underline" href="/dashboard/solicitudes">
             → Solicitudes de acceso
+          </Link>
+        )}
+        {canSeePorteria && (
+          <Link className="block text-blue-600 hover:underline" href="/dashboard/porteria">
+            → Portería
           </Link>
         )}
         {canSeeSstBandeja && (
