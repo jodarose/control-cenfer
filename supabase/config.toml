@@ -1,0 +1,14 @@
+# Minimal Supabase config — this project uses Supabase Cloud only.
+# Local Supabase stack is intentionally disabled (no Docker).
+# Migrations are version-controlled here and applied to Cloud via Supabase CLI
+# or via the MCP `apply_migration` tool.
+
+project_id = "control-cenfer"
+
+[db]
+# Used only if running `supabase start` locally (not in this project).
+port = 54322
+
+[api]
+# Public schemas exposed via REST/GraphQL.
+schemas = ["public"]
