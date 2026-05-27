@@ -4,6 +4,7 @@ import { getAuthenticatedUser } from '@/lib/auth/get-user';
 export default async function DashboardPage() {
   const { profile } = await getAuthenticatedUser();
   const canSeeEmpresas = ['super_admin', 'recepcion', 'sst'].includes(profile.rol);
+  const canSeeSolicitudes = ['super_admin', 'recepcion', 'sst', 'empresa'].includes(profile.rol);
 
   return (
     <div>
@@ -22,10 +23,12 @@ export default async function DashboardPage() {
             → Empresas contratistas
           </Link>
         )}
+        {canSeeSolicitudes && (
+          <Link className="block text-blue-600 hover:underline" href="/dashboard/solicitudes">
+            → Solicitudes de acceso
+          </Link>
+        )}
       </div>
-      <p className="mt-4 text-sm text-gray-500">
-        Las funcionalidades específicas por rol se construyen en las siguientes fases.
-      </p>
     </div>
   );
 }
