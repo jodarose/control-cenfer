@@ -7,13 +7,93 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
+      access_requests: {
+        Row: {
+          activity_id: string
+          area_id: string | null
+          cantidad_estimada: number
+          company_id: string
+          created_at: string
+          estado: Database["public"]["Enums"]["access_request_status"]
+          fecha_desde: string
+          fecha_hasta: string
+          horario_fin: string
+          horario_inicio: string
+          id: string
+          nivel_riesgo: Database["public"]["Enums"]["risk_level"]
+          observaciones: string | null
+          public_token: string
+          public_token_expires_at: string
+          responsable_cenfer_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          activity_id: string
+          area_id?: string | null
+          cantidad_estimada: number
+          company_id: string
+          created_at?: string
+          estado?: Database["public"]["Enums"]["access_request_status"]
+          fecha_desde: string
+          fecha_hasta: string
+          horario_fin?: string
+          horario_inicio?: string
+          id?: string
+          nivel_riesgo: Database["public"]["Enums"]["risk_level"]
+          observaciones?: string | null
+          public_token?: string
+          public_token_expires_at: string
+          responsable_cenfer_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          activity_id?: string
+          area_id?: string | null
+          cantidad_estimada?: number
+          company_id?: string
+          created_at?: string
+          estado?: Database["public"]["Enums"]["access_request_status"]
+          fecha_desde?: string
+          fecha_hasta?: string
+          horario_fin?: string
+          horario_inicio?: string
+          id?: string
+          nivel_riesgo?: Database["public"]["Enums"]["risk_level"]
+          observaciones?: string | null
+          public_token?: string
+          public_token_expires_at?: string
+          responsable_cenfer_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "access_requests_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "activities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "access_requests_area_id_fkey"
+            columns: ["area_id"]
+            isOneToOne: false
+            referencedRelation: "areas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "access_requests_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       activities: {
         Row: {
           activa: boolean
@@ -160,6 +240,115 @@ export type Database = {
         }
         Relationships: []
       }
+      people: {
+        Row: {
+          apellido: string
+          arl: string | null
+          cargo: string | null
+          cedula: string
+          company_id: string
+          created_at: string
+          email: string | null
+          eps: string | null
+          foto_url: string | null
+          id: string
+          nombre: string
+          telefono: string | null
+          updated_at: string
+        }
+        Insert: {
+          apellido: string
+          arl?: string | null
+          cargo?: string | null
+          cedula: string
+          company_id: string
+          created_at?: string
+          email?: string | null
+          eps?: string | null
+          foto_url?: string | null
+          id?: string
+          nombre: string
+          telefono?: string | null
+          updated_at?: string
+        }
+        Update: {
+          apellido?: string
+          arl?: string | null
+          cargo?: string | null
+          cedula?: string
+          company_id?: string
+          created_at?: string
+          email?: string | null
+          eps?: string | null
+          foto_url?: string | null
+          id?: string
+          nombre?: string
+          telefono?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "people_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      person_documents: {
+        Row: {
+          archivo_url: string
+          created_at: string
+          document_type: Database["public"]["Enums"]["document_type_key"]
+          estado: Database["public"]["Enums"]["document_status"]
+          fecha_emision: string | null
+          fecha_vencimiento: string | null
+          id: string
+          motivo_rechazo: string | null
+          person_id: string
+          revisado_at: string | null
+          revisado_por: string | null
+          updated_at: string
+        }
+        Insert: {
+          archivo_url: string
+          created_at?: string
+          document_type: Database["public"]["Enums"]["document_type_key"]
+          estado?: Database["public"]["Enums"]["document_status"]
+          fecha_emision?: string | null
+          fecha_vencimiento?: string | null
+          id?: string
+          motivo_rechazo?: string | null
+          person_id: string
+          revisado_at?: string | null
+          revisado_por?: string | null
+          updated_at?: string
+        }
+        Update: {
+          archivo_url?: string
+          created_at?: string
+          document_type?: Database["public"]["Enums"]["document_type_key"]
+          estado?: Database["public"]["Enums"]["document_status"]
+          fecha_emision?: string | null
+          fecha_vencimiento?: string | null
+          id?: string
+          motivo_rechazo?: string | null
+          person_id?: string
+          revisado_at?: string | null
+          revisado_por?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "person_documents_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "people"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       porterias: {
         Row: {
           activa: boolean
@@ -214,6 +403,148 @@ export type Database = {
         }
         Relationships: []
       }
+      request_misc: {
+        Row: {
+          access_request_id: string
+          descripcion: string
+          id: string
+        }
+        Insert: {
+          access_request_id: string
+          descripcion: string
+          id?: string
+        }
+        Update: {
+          access_request_id?: string
+          descripcion?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_misc_access_request_id_fkey"
+            columns: ["access_request_id"]
+            isOneToOne: false
+            referencedRelation: "access_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      request_people: {
+        Row: {
+          access_request_id: string
+          created_at: string
+          estado_individual: Database["public"]["Enums"]["person_request_status"]
+          id: string
+          person_id: string
+          qr_code: string | null
+          qr_expires_at: string | null
+        }
+        Insert: {
+          access_request_id: string
+          created_at?: string
+          estado_individual?: Database["public"]["Enums"]["person_request_status"]
+          id?: string
+          person_id: string
+          qr_code?: string | null
+          qr_expires_at?: string | null
+        }
+        Update: {
+          access_request_id?: string
+          created_at?: string
+          estado_individual?: Database["public"]["Enums"]["person_request_status"]
+          id?: string
+          person_id?: string
+          qr_code?: string | null
+          qr_expires_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_people_access_request_id_fkey"
+            columns: ["access_request_id"]
+            isOneToOne: false
+            referencedRelation: "access_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "request_people_person_id_fkey"
+            columns: ["person_id"]
+            isOneToOne: false
+            referencedRelation: "people"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      request_tools: {
+        Row: {
+          access_request_id: string
+          cantidad: number
+          descripcion: string
+          id: string
+          serial: string | null
+        }
+        Insert: {
+          access_request_id: string
+          cantidad?: number
+          descripcion: string
+          id?: string
+          serial?: string | null
+        }
+        Update: {
+          access_request_id?: string
+          cantidad?: number
+          descripcion?: string
+          id?: string
+          serial?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_tools_access_request_id_fkey"
+            columns: ["access_request_id"]
+            isOneToOne: false
+            referencedRelation: "access_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      request_vehicles: {
+        Row: {
+          access_request_id: string
+          conductor_person_id: string | null
+          id: string
+          placa: string
+          tipo: string
+        }
+        Insert: {
+          access_request_id: string
+          conductor_person_id?: string | null
+          id?: string
+          placa: string
+          tipo: string
+        }
+        Update: {
+          access_request_id?: string
+          conductor_person_id?: string | null
+          id?: string
+          placa?: string
+          tipo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_vehicles_access_request_id_fkey"
+            columns: ["access_request_id"]
+            isOneToOne: false
+            referencedRelation: "access_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "request_vehicles_conductor_person_id_fkey"
+            columns: ["conductor_person_id"]
+            isOneToOne: false
+            referencedRelation: "people"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -223,10 +554,37 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["role"]
       }
+      get_request_by_token: {
+        Args: { token: string }
+        Returns: {
+          activity_id: string
+          area_id: string
+          cantidad_estimada: number
+          company_id: string
+          estado: Database["public"]["Enums"]["access_request_status"]
+          fecha_desde: string
+          fecha_hasta: string
+          id: string
+          nivel_riesgo: Database["public"]["Enums"]["risk_level"]
+          observaciones: string
+          public_token_expires_at: string
+        }[]
+      }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
     }
     Enums: {
+      access_request_status:
+        | "borrador"
+        | "enviada"
+        | "en_carga"
+        | "en_revision_sst"
+        | "aprobada"
+        | "rechazada"
+        | "vigente"
+        | "vencida"
+        | "cancelada"
+      document_status: "pendiente" | "aprobado" | "rechazado"
       document_type_key:
         | "cedula"
         | "arl"
@@ -236,6 +594,11 @@ export type Database = {
         | "induccion"
         | "alturas"
         | "examen_medico"
+      person_request_status:
+        | "pendiente_docs"
+        | "en_revision"
+        | "aprobada"
+        | "rechazada"
       risk_level: "bajo" | "medio" | "alto"
       role:
         | "super_admin"
@@ -371,6 +734,18 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      access_request_status: [
+        "borrador",
+        "enviada",
+        "en_carga",
+        "en_revision_sst",
+        "aprobada",
+        "rechazada",
+        "vigente",
+        "vencida",
+        "cancelada",
+      ],
+      document_status: ["pendiente", "aprobado", "rechazado"],
       document_type_key: [
         "cedula",
         "arl",
@@ -380,6 +755,12 @@ export const Constants = {
         "induccion",
         "alturas",
         "examen_medico",
+      ],
+      person_request_status: [
+        "pendiente_docs",
+        "en_revision",
+        "aprobada",
+        "rechazada",
       ],
       risk_level: ["bajo", "medio", "alto"],
       role: [
